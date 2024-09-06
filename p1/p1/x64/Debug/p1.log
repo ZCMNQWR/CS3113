@@ -1,0 +1,7 @@
+﻿  main.cpp
+  ShaderProgram.cpp
+  Generating Code...
+C:\Users\steve\Desktop\CS3113\p1\p1\main.cpp(8,10): error C1083: Cannot open include file: 'SDL.h': No such file or directory
+C:\Users\steve\Desktop\CS3113\p1\p1\ShaderProgram.h(7,10): error C1083: Cannot open include file: 'SDL_opengl.h': No such file or directory
+  (compiling source file 'ShaderProgram.cpp')
+  

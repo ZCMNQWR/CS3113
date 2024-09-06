@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\steve\\Desktop\\CS3113\\SDLSimple\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EFCD23FD-4536-4535-BBA5-4EE65B45DE86}|SDLSimple\\SDLSimple.vcxproj|C:\\Users\\steve\\Desktop\\CS3113\\SDLSimple\\SDLSimple\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EFCD23FD-4536-4535-BBA5-4EE65B45DE86}|SDLSimple\\SDLSimple.vcxproj|solutionrelative:SDLSimple\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\steve\\Desktop\\CS3113\\SDLSimple\\SDLSimple\\main.cpp",
+              "RelativeDocumentMoniker": "SDLSimple\\main.cpp",
+              "ToolTip": "C:\\Users\\steve\\Desktop\\CS3113\\SDLSimple\\SDLSimple\\main.cpp",
+              "RelativeToolTip": "SDLSimple\\main.cpp",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAAAH4AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-09-06T17:48:48.073Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
