@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\steve\\Desktop\\CS UY 3113\\copy\\SDLProject\\",
+  "WorkspaceRootPath": "C:\\Users\\steve\\Documents\\GitHub\\CS3113\\Simple 2D Scene\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0F8B7E43-F01F-46E6-A5A6-217A13937247}|SDLProject.vcxproj|C:\\Users\\steve\\Desktop\\CS UY 3113\\copy\\SDLProject\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{0F8B7E43-F01F-46E6-A5A6-217A13937247}|SDLProject.vcxproj|C:\\Users\\steve\\Documents\\GitHub\\CS3113\\Simple 2D Scene\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{0F8B7E43-F01F-46E6-A5A6-217A13937247}|SDLProject.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -20,11 +20,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\steve\\Desktop\\CS UY 3113\\copy\\SDLProject\\main.cpp",
+              "DocumentMoniker": "C:\\Users\\steve\\Documents\\GitHub\\CS3113\\Simple 2D Scene\\main.cpp",
               "RelativeDocumentMoniker": "main.cpp",
-              "ToolTip": "C:\\Users\\steve\\Desktop\\CS UY 3113\\copy\\SDLProject\\main.cpp",
+              "ToolTip": "C:\\Users\\steve\\Documents\\GitHub\\CS3113\\Simple 2D Scene\\main.cpp",
               "RelativeToolTip": "main.cpp",
-              "ViewState": "AgIAAMwAAAAAAAAAAAAAAPQAAABFAAAAAAAAAA==",
+              "ViewState": "AgIAABQBAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-09-28T18:35:41.698Z",
               "EditorCaption": ""
