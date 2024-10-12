@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\steve\Desktop\CS UY 3113 Game\Pong Clone\main.cpp(124,23): warning C4018: '<': signed/unsigned mismatch
+  SDLProject.vcxproj -> C:\Users\steve\Desktop\CS UY 3113 Game\Pong Clone\Debug\SDLProject.exe
