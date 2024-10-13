@@ -1,3 +1,6 @@
 ﻿  main.cpp
-C:\Users\steve\Desktop\CS UY 3113 Game\Pong Clone\main.cpp(124,23): warning C4018: '<': signed/unsigned mismatch
-  SDLProject.vcxproj -> C:\Users\steve\Desktop\CS UY 3113 Game\Pong Clone\Debug\SDLProject.exe
+C:\Users\steve\Documents\GitHub\CS3113\Pong Clone\main.cpp(192,23): warning C4018: '<': signed/unsigned mismatch
+  ShaderProgram.cpp
+  Generating Code...
+  LINK : C:\Users\steve\Documents\GitHub\CS3113\Pong Clone\Debug\SDLProject.exe not found or not built by the last incremental link; performing full link
+  SDLProject.vcxproj -> C:\Users\steve\Documents\GitHub\CS3113\Pong Clone\Debug\SDLProject.exe

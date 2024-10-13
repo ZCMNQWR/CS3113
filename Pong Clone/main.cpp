@@ -24,7 +24,7 @@ WINDOW_HEIGHT = 600;
 
 constexpr float BG_RED = 0.05f,
 BG_GREEN = 0.15f,
-BG_BLUE = 0.2f,
+BG_BLUE = 0.3f,
 BG_OPACITY = 1.0f;
 
 constexpr int VIEWPORT_X = 0,
@@ -37,24 +37,50 @@ F_SHADER_PATH[] = "shaders/fragment_textured.glsl";
 
 constexpr float MILLISECONDS_IN_SECOND = 1000.0;
 
-constexpr char LEFT_PLAYER_FILEPATH[] = "assets/hammer.png",
-RIGHT_PLAYER_FILEPATH[] = "assets/shark.png",
-BALL_FILEPATH[] = "assets/fish.png",
+constexpr char LEFT_PLAYER_FILEPATH[] = "assets/hammer-sheet.png",
+RIGHT_PLAYER_FILEPATH[] = "assets/shark-sheet.png",
+BALL_FILEPATH[] = "assets/fish-sheet.png",
 FONTSHEET_FILEPATH[] = "assets/font1.png";
 
 constexpr GLint NUMBER_OF_TEXTURES = 1,
 LEVEL_OF_DETAIL = 0,
 TEXTURE_BORDER = 0;
 
+/* SPRITESHEET */
 constexpr int FONTBANK_SIZE = 16;
+
+int shark_moving[2][6] = { 
+    {1, 2, 3, 4, 5, 12}, //up
+	{6, 7, 8, 9, 8, 7} //down
+};
+int fish_moving[2][2] = {
+	{0, 1}, //right
+	{2, 3} //left
+};
 
 GLuint right_player_id;
 GLuint left_player_id;
 GLuint ball_id;
 GLuint g_font_texture_id;
 
-float SPEED_PLAYER = 10.0f,
+float SPEED_PLAYER = 15.0f,
 SPEED_BALL = 7.0f;
+
+int* animation_indices = shark_moving[0];
+int* animation_indices_hammer = shark_moving[0];
+int* animation_indices_fish[3] = { fish_moving[0], fish_moving[0], fish_moving[0]};
+int animation_frame = 6;
+int animation_frame_fish[3] = { 2, 2, 2 };
+int animation_index= 0;
+int animation_index_fish[3] = { 0, 0, 0 };
+
+float animation_time = 0.0f;
+float animation_time_fish[3] = { 0.0f, 0.0f, 0.0f };
+void draw_sprite_from_texture_atlas(ShaderProgram* program, GLuint texture_id, int index,
+    int rows, int cols);
+void draw_text(ShaderProgram* shader_program, GLuint font_texture_id, std::string text,
+    float font_size, float spacing, glm::vec3 position);
+/*----------------------*/
 
 SDL_Window* g_display_window = nullptr;
 AppStatus g_app_status = RUNNING;
@@ -95,8 +121,9 @@ int SINGLE_PLAYER = -1;
 int MULTI_PLAYER = 1;
 int gamemode_status = MULTI_PLAYER;
 
-enum direction { UP, DOWN };
-direction move = UP;
+enum direction { UP, DOWN};
+direction r_move = UP, l_move = UP;
+
 
 enum winner { LEFT, RIGHT, NONE };
 winner win = NONE;
@@ -109,8 +136,49 @@ void render();
 void shutdown();
 
 GLuint load_texture(const char* filepath);
-
 void draw_object(glm::mat4& object_model_matrix, GLuint& object_texture_id);
+
+void draw_sprite_from_texture_atlas(ShaderProgram* shaderProgram, GLuint texture_id, int index,
+    int rows, int cols)
+{
+    // Calculate the UV location of the indexed frame
+    float u_coord = (float)(index % cols) / (float)cols;
+    float v_coord = (float)(index / cols) / (float)rows;
+
+    // Calculate its UV size
+    float width = 1.0f / (float)cols;
+    float height = 1.0f / (float)rows;
+
+    // Match the texture coordinates to the vertices
+    float tex_coords[] =
+    {
+        u_coord, v_coord + height, u_coord + width, v_coord + height, u_coord + width,
+        v_coord, u_coord, v_coord + height, u_coord + width, v_coord, u_coord, v_coord
+    };
+
+    float vertices[] =
+    {
+        // shark-sheet.png
+		-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f,
+		-0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f
+    };
+
+    // Render
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+
+    glVertexAttribPointer(shaderProgram->get_position_attribute(), 2, GL_FLOAT, false, 0,
+        vertices);
+    glEnableVertexAttribArray(shaderProgram->get_position_attribute());
+
+    glVertexAttribPointer(shaderProgram->get_tex_coordinate_attribute(), 2, GL_FLOAT, false, 0,
+        tex_coords);
+    glEnableVertexAttribArray(shaderProgram->get_tex_coordinate_attribute());
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glDisableVertexAttribArray(shaderProgram->get_position_attribute());
+    glDisableVertexAttribArray(shaderProgram->get_tex_coordinate_attribute());
+}
 
 void draw_text(ShaderProgram* shader_program, GLuint font_texture_id, std::string text,
     float font_size, float spacing, glm::vec3 position)
@@ -201,7 +269,7 @@ GLuint load_texture(const char* filepath)
 void initialise()
 {
     SDL_Init(SDL_INIT_VIDEO);
-    g_display_window = SDL_CreateWindow("Pong Customize!",
+    g_display_window = SDL_CreateWindow("Ocean Pong!",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH, WINDOW_HEIGHT,
         SDL_WINDOW_OPENGL);
@@ -243,7 +311,7 @@ void initialise()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	ball_movement[0] = glm::vec3(1.0f, .3f, 0.0f);
-	ball_movement[1] = glm::vec3(-1.3f, .4f, 0.0f);
+	ball_movement[1] = glm::vec3(1.3f, .4f, 0.0f);
 	ball_movement[2] = glm::vec3(1.5f, -.5f, 0.0f);
 
 	glm::normalize(ball_movement[0]);
@@ -287,6 +355,7 @@ void process_input()
             if (left_player_pos.y < WALL_UP - (INIT_SCALE_PLAYER_L.y / 2.0f))
             {
                 left_player_movement.y = 1.0f;
+				animation_indices_hammer = shark_moving[0];
             }
         }
         if (key_state[SDL_SCANCODE_S])
@@ -294,6 +363,7 @@ void process_input()
             if (left_player_pos.y > WALL_DOWN + (INIT_SCALE_PLAYER_L.y / 2.0f))
             {
                 left_player_movement.y = -1.0f;
+				animation_indices_hammer = shark_moving[1];
             }
         }
         if (key_state[SDL_SCANCODE_UP])
@@ -303,6 +373,7 @@ void process_input()
                 if (right_player_pos.y < WALL_UP - (INIT_SCALE_PLAYER_R.y / 2.0f))
                 {
                     right_player_movement.y = 1.0f;
+                    animation_indices = shark_moving[0];
                 }
             }
 
@@ -314,6 +385,7 @@ void process_input()
                 if (right_player_pos.y > WALL_DOWN + (INIT_SCALE_PLAYER_R.y / 2.0f))
                 {
                     right_player_movement.y = -1.0f;
+                    animation_indices = shark_moving[1];
                 }
             }
         }
@@ -325,22 +397,24 @@ void update()
 	// Single player mode
     if (gamemode_status == SINGLE_PLAYER && win == NONE)
     {
-        if (move == UP) {
+        if (r_move == UP) {
             if (right_player_pos.y < WALL_UP - (INIT_SCALE_PLAYER_R.y / 2.0f))
             {
                 right_player_movement.y = 1.0f;
+				animation_indices = shark_moving[0];
             }
             else if (right_player_pos.y >= WALL_UP - (INIT_SCALE_PLAYER_R.y / 2.0f)) {
-                    move = DOWN;                
+                    r_move = DOWN;                
             }
 		}
         else {
             if (right_player_pos.y > WALL_DOWN + (INIT_SCALE_PLAYER_R.y / 2.0f))
             {
                 right_player_movement.y = -1.0f;
+				animation_indices = shark_moving[1];
             }
             else if (right_player_pos.y <= WALL_DOWN + (INIT_SCALE_PLAYER_R.y / 2.0f)) {
-                    move = UP;                
+                    r_move = UP;                
             }
         }
     }
@@ -348,6 +422,37 @@ void update()
     float ticks = (float)SDL_GetTicks() / MILLISECONDS_IN_SECOND;
     float delta_time = ticks - previous_ticks;
     previous_ticks = ticks;
+
+    /* ANIMATION */
+	animation_time += delta_time;
+	float frame_per_second = 1.0f / 6;
+
+	if (animation_time >= frame_per_second)
+	{
+		animation_time = 0.0f;
+		animation_index++;
+		if (animation_index >= animation_frame)
+		{
+			animation_index = 0;
+		}
+	}
+
+    for (int i = 0; i < num_balls; i++) 
+    {
+        animation_time_fish[i] += delta_time;
+        float frame_per_second_fish = 1.0f / 6;
+
+		if (animation_time_fish[i] >= frame_per_second_fish)
+		{
+			animation_time_fish[i] = 0.0f;
+			animation_index_fish[i]++;
+			if (animation_index_fish[i] >= animation_frame_fish[i])
+			{
+				animation_index_fish[i] = 0;
+			}
+		}
+    }
+
 
     /* GAME LOGIC */
     right_player_pos += right_player_movement * SPEED_PLAYER * delta_time;
@@ -395,12 +500,16 @@ void update()
         //Bounce on player
 		else if (ball_position[i].x + (INIT_SCALE_BALL.x / 2.0f) >= (right_player_pos.x - (INIT_SCALE_PLAYER_R.x / 2.0f)) &&
 			ball_position[i].y <= (right_player_pos.y + (INIT_SCALE_PLAYER_R.y / 2.0f)) &&
-			ball_position[i].y >= (right_player_pos.y - (INIT_SCALE_PLAYER_R.y / 2.0f))) {
-			ball_movement[i].x = -fabs(ball_movement[i].x);
+			ball_position[i].y >= (right_player_pos.y - (INIT_SCALE_PLAYER_R.y / 2.0f))) 
+        {
+			animation_indices_fish[i] = fish_moving[1];
+            ball_movement[i].x = -fabs(ball_movement[i].x);
 		}
 		else if (ball_position[i].x - (INIT_SCALE_BALL.x / 2.0f) <= (left_player_pos.x + (INIT_SCALE_PLAYER_L.x / 2.0f)) &&
 			ball_position[i].y <= (left_player_pos.y + (INIT_SCALE_PLAYER_L.y / 2.0f)) &&
-			ball_position[i].y >= (left_player_pos.y - (INIT_SCALE_PLAYER_L.y / 2.0f))) {
+			ball_position[i].y >= (left_player_pos.y - (INIT_SCALE_PLAYER_L.y / 2.0f))) 
+        {
+			animation_indices_fish[i] = fish_moving[0];
 			ball_movement[i].x = fabs(ball_movement[i].x);
 		}
     }
@@ -444,20 +553,20 @@ void render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glBindTexture(GL_TEXTURE_2D, left_player_id);
-    g_shader_program.set_model_matrix(left_player_matrix);
-    draw_object(left_player_matrix, left_player_id);
-
-    glBindTexture(GL_TEXTURE_2D, right_player_id);
     g_shader_program.set_model_matrix(right_player_matrix);
-	draw_object(right_player_matrix, right_player_id);
-
-	glBindTexture(GL_TEXTURE_2D, ball_id);
-	for (int i = 0; i < num_balls; i++)
+	draw_sprite_from_texture_atlas(&g_shader_program, right_player_id, animation_indices[animation_index], 2, 6);
+    
+    g_shader_program.set_model_matrix(left_player_matrix);
+	draw_sprite_from_texture_atlas(&g_shader_program, left_player_id, animation_indices_hammer[animation_index], 2, 6);
+    
+ 	for (int i = 0; i < num_balls; i++)
 	{
 		g_shader_program.set_model_matrix(ball_matrix[i]);
-		draw_object(ball_matrix[i], ball_id);
+        draw_sprite_from_texture_atlas(&g_shader_program, ball_id, animation_indices_fish[i][animation_index_fish[i]], 2, 2);
 	}
+    if (num_balls == 0) {
+		draw_text(&g_shader_program, g_font_texture_id, "Press 1/2/3", 1.0f, 0.0f, glm::vec3(-5.5f, 4.5f, 0.0f));
+    }
 
 	if (win == LEFT && gamemode_status == MULTI_PLAYER) {
 		draw_text(&g_shader_program, g_font_texture_id, "Left Player Wins!", 1.0f, 0.0f, glm::vec3(-8.0f, 4.5f, 0.0f));
@@ -482,7 +591,7 @@ int main(int argc, char* argv[])
     initialise();
 
     while (g_app_status == RUNNING)
-    {
+    {   
         process_input();
         update();
         render();
