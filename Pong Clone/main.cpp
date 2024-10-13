@@ -158,12 +158,10 @@ void draw_sprite_from_texture_atlas(ShaderProgram* shaderProgram, GLuint texture
 
     float vertices[] =
     {
-        // shark-sheet.png
 		-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f,
 		-0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f
     };
 
-    // Render
     glBindTexture(GL_TEXTURE_2D, texture_id);
 
     glVertexAttribPointer(shaderProgram->get_position_attribute(), 2, GL_FLOAT, false, 0,
