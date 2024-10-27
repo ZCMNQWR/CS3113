@@ -47,6 +47,7 @@ LEVEL_OF_DETAIL = 0,
 TEXTURE_BORDER = 0;
 
 /* SPRITESHEET */
+/*-------------------------------*/
 constexpr int FONTBANK_SIZE = 16;
 
 int shark_moving[2][6] = { 
