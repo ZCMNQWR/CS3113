@@ -110,11 +110,13 @@ void LevelA::initialise()
 	m_game_state.enemies[0].set_ai_type(JUMPER);
 	m_game_state.enemies[0].set_ai_state(IDLE);
 	m_game_state.enemies[0].set_position(glm::vec3(11.0f, -4.0f, 0.0f));
+	m_game_state.enemies[0].set_scale(glm::vec3(1.0f, 0.75f, 1.0f));
 
 	m_game_state.enemies[1].set_texture_id(enemy1_texture_id);
     m_game_state.enemies[1].set_ai_type(GUARD);
 	m_game_state.enemies[1].set_ai_state(IDLE);
 	m_game_state.enemies[1].set_position(glm::vec3(18.0f, -5.0f, 0.0f));
+	m_game_state.enemies[1].set_scale(glm::vec3(1.0f, 0.75f, 1.0f));
 	m_game_state.enemies[1].set_left_boundary(14.0f);
 	m_game_state.enemies[1].set_right_boundary(19.0f);
 
@@ -122,6 +124,7 @@ void LevelA::initialise()
     m_game_state.enemies[2].set_ai_type(WALKER);
 	m_game_state.enemies[2].set_ai_state(WALKING);
 	m_game_state.enemies[2].set_position(glm::vec3(5.0f, -2.0f, 0.0f));
+	m_game_state.enemies[2].set_scale(glm::vec3(1.0f, 0.75f, 1.0f));
 	m_game_state.enemies[2].set_left_boundary(1.0f);
 	m_game_state.enemies[2].set_right_boundary(5.0f);
 
