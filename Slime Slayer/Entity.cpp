@@ -30,6 +30,10 @@ void Entity::ai_activate(Entity *player)
             ai_guard_v(player);
             break;
             
+		case RUNAWAY:
+			ai_runaway(player);
+			break;
+
         default:
             break;
     }
@@ -167,6 +171,53 @@ void Entity::ai_jump(Entity* player)
             jump();
             break;
         }
+    default:
+        break;
+    }
+}
+
+void Entity::ai_runaway(Entity* player) 
+{
+    if ((m_position.x > player->get_position().x))
+    {
+        face_right();
+    }
+    else
+    {
+        face_left();
+    }
+    switch (m_ai_state)
+    {
+    case IDLE:
+        if (glm::distance(m_position, player->get_position()) < 5.0f) m_ai_state = WALKING;
+        break;
+    case WALKING:
+        if (glm::distance(m_position, player->get_position()) > 10.0f)
+        {
+            m_ai_state = IDLE;
+            m_movement = glm::vec3(0.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            if (m_position.x > player->get_position().x)
+            {
+                m_movement = glm::vec3(1.0f, 0.0f, 0.0f);
+                face_right();
+            }
+            else
+            {
+                m_movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+                face_left();
+            }
+            if (m_position.y > player->get_position().y) {
+                m_movement.y = 1.0f;
+            }
+            else
+            {
+                m_movement.y = -1.0f;
+            }
+        }
+        break;
     default:
         break;
     }

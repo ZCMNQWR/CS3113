@@ -158,18 +158,18 @@ void LevelC::initialise()
 	m_game_state.enemies[3].set_right_boundary(24.0f);
 
 	m_game_state.enemies[4].set_texture_id(enemy2_texture_id);
-	m_game_state.enemies[4].set_ai_type(GUARD);
+	m_game_state.enemies[4].set_ai_type(WALKER);
 	m_game_state.enemies[4].set_ai_state(IDLE);
 	m_game_state.enemies[4].set_position(glm::vec3(10.0f, -22.0f, 0.0f));
 	m_game_state.enemies[4].set_left_boundary(8.0f);
 	m_game_state.enemies[4].set_right_boundary(10.0f);
 
 	m_game_state.enemies[5].set_texture_id(enemy0_texture_id);
-	m_game_state.enemies[5].set_ai_type(GUARD_V);
+	m_game_state.enemies[5].set_ai_type(RUNAWAY);
 	m_game_state.enemies[5].set_ai_state(IDLE);
 	m_game_state.enemies[5].set_position(glm::vec3(6.0f, -26.0f, 0.0f));
-	m_game_state.enemies[5].set_upper_boundary(-24.0f);
-	m_game_state.enemies[5].set_lower_boundary(-28.0f);
+	//m_game_state.enemies[5].set_upper_boundary(-24.0f);
+	//m_game_state.enemies[5].set_lower_boundary(-28.0f);
 
         
 

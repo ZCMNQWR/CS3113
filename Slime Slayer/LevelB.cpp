@@ -133,11 +133,11 @@ void LevelB::initialise()
     }
 
     m_game_state.enemies[0].set_texture_id(enemy1_texture_id);
-    m_game_state.enemies[0].set_ai_type(GUARD);
+    m_game_state.enemies[0].set_ai_type(RUNAWAY);
     m_game_state.enemies[0].set_ai_state(IDLE);
     m_game_state.enemies[0].set_position(glm::vec3(20.0f, -2.0f, 0.0f));
-    m_game_state.enemies[0].set_left_boundary(16.0f);
-    m_game_state.enemies[0].set_right_boundary(27.0f);
+    //m_game_state.enemies[0].set_left_boundary(16.0f);
+    //m_game_state.enemies[0].set_right_boundary(27.0f);
 
     m_game_state.enemies[1].set_texture_id(enemy2_texture_id);
     m_game_state.enemies[1].set_ai_type(WALKER);

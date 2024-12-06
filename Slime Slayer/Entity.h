@@ -6,8 +6,8 @@
 #include "Map.h"
 #include "glm/glm.hpp"
 #include "ShaderProgram.h"
-enum EntityType { PLATFORM, PLAYER, ENEMY, GOAL, BACKGROUND };
-enum AIType { WALKER, GUARD, GUARD_V };
+enum EntityType { ITEM, PLAYER, ENEMY, GOAL, BACKGROUND };
+enum AIType { WALKER, GUARD, GUARD_V, RUNAWAY };
 enum AIState { WALKING, IDLE, JUMPING };
 
 
@@ -109,6 +109,7 @@ public:
     void ai_guard(Entity* player);
     void ai_jump(Entity* player);
     void ai_guard_v(Entity* player);
+	void ai_runaway(Entity* player);
 
     void normalise_movement() { m_movement = glm::normalize(m_movement); }
 
