@@ -33,7 +33,8 @@ struct GameState
     Mix_Music *bgm;
     Mix_Chunk *attack_sfx,
 		* goal_sfx,
-		* death_sfx;
+		* death_sfx,
+		* win_sfx;
     
     // ————— POINTERS TO OTHER SCENES ————— //
     int next_scene_id;

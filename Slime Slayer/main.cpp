@@ -311,6 +311,12 @@ void update()
             GLint keyLocation = glGetUniformLocation(g_shader_program.get_program_id(), "key");
             glUniform1i(keyLocation, 1);
         }
+        if (g_current_scene == g_level_c && g_current_scene->get_state().goal->get_goal_reached())
+        {
+			Mix_VolumeMusic(0);
+			GLint keyLocation = glGetUniformLocation(g_shader_program.get_program_id(), "key");
+			glUniform1i(keyLocation, 2);
+        }
     }
     
     

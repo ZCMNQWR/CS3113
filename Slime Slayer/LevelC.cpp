@@ -11,6 +11,7 @@ bool goal_appear_c = false;
 enum play_goal_c { No, Play, Off };
 play_goal_c goal_sound_c = No;
 play_goal_c death_sound_c = No;
+play_goal_c win_sound_c = No;
 
 constexpr char SPRITESHEET_FILEPATH[] = "assets/player.png",
 ENEMY0_FILEPATH[] = "assets/green.png",
@@ -205,6 +206,8 @@ void LevelC::initialise()
     Mix_VolumeChunk(m_game_state.goal_sfx, 30);
     m_game_state.death_sfx = Mix_LoadWAV("assets/death.wav");
     Mix_VolumeChunk(m_game_state.death_sfx, 60);
+	m_game_state.win_sfx = Mix_LoadWAV("assets/win.wav");
+	Mix_VolumeChunk(m_game_state.win_sfx, 60);
 
     font_texture_id_c = Utility::load_texture(FONT_FILEPATH);
 }
@@ -284,6 +287,11 @@ void LevelC::render(ShaderProgram* g_shader_program, glm::mat4 g_view_matrix)
     }
     if (m_game_state.goal->get_goal_reached())
     {
+		if (win_sound_c == No)
+		{
+			Mix_PlayChannel(-1, m_game_state.win_sfx, 0);
+			win_sound_c = Play;
+		}
         Utility::draw_text(g_shader_program, font_texture_id_c, "You Win!", 0.5f, 0.0f,
             glm::vec3(m_game_state.player->get_position().x - 2.0f, m_game_state.player->get_position().y + 1.0f, 0.0f));
     }
